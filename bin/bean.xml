@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<context:annotation-config/>
+	<context:component-scan base-package="com.five9.service"></context:component-scan>
+	<context:component-scan base-package="com.five9.consumer"></context:component-scan>
+	<bean id = "mssql" class = "com.five9.consumer.DBConnection">
+		<property name="connection" ref = "lsmssql"></property>
+	</bean>
+	<bean id = "mysql" class = "com.five9.consumer.DBConnection">
+		<property name="connection" ref = "vccmysql"></property>
+	</bean>
+	
+	
+	<!--start of bean for ls mssql mimic   -->
+	<bean id = "mssqlmimic" class = "com.five9.consumer.DBConnection">
+		<property name="connection" ref = "lsmysqlmimic"></property>
+	</bean>
+	 <bean id = "comp" class = "com.five9.consumer.DBConnection">
+		<property name="connection" ref = "compmimic"></property>
+	</bean> 
+	<!--end of bean for ls mssql mimic -->
+	
+	
+	
+	
+	
+	 <bean id="lsmssql" class = "com.five9.service.LsMSsqlConn">
+	 	<property name="mssqlPara" ref="mssqlPara"></property>
+	 	<property name="updateSql" value =""></property>
+	 	<property name="path" value = "Input/LSaccountRateplan.xlsx"></property>
+	 	<property name="querySql" value = "select * from Server"></property>
+	 	<property name="deleteSql" value = ""></property>
+	 	<property name="deleteSwitch" value = "False"></property>
+	 	<property name="batchInsertionSql" value = ""></property>
+	 	<property name="querySwitch" value = "False"></property>
+	 </bean>
+	 
+	 <bean id="vccmysql" class = "com.five9.service.VccMysqlConn" primary = "true">
+	 	<property name="mysqlPara" ref="mysqlPara"></property>
+	 	<property name="updateSql" value =""></property>
+	 	<property name="querySql" value = "select * from vcc"></property>
+	 	<property name="deleteSql" value = "delete from vcc"></property>
+	 	<property name="batchInsertionSql" value = "insert into vcc(account,plan) values(?,?)"></property>
+	 	<property name="path" value = "Input/VccaccountRateplan.csv"></property>
+	 	<property name="deleteSwitch" value = "True"></property>
+	 	<property name="querySwitch" value = "False"></property>
+	 </bean>
+	 
+	 
+	 
+	 
+	 <!-- start of mysql mimic test purpose -->
+	 <bean id = "lsmysqlmimic" class = "com.five9.service.LsMysqlMimicConn" >
+	 	<property name="mysqlPara" ref="mysqlPara"></property>
+	 	<property name="updateSql" value =""></property>
+	 	<property name="querySql" value = "select * from ls_mysqlmimic"></property>
+	 	<property name="deleteSql" value = "delete from ls_mysqlmimic"></property>
+	 	<property name="batchInsertionSql" value = "insert into ls_mysqlmimic(accounts,plan) values(?,?)"></property>
+	 	<property name="path" value = "Input/LSaccountRateplan.xlsx"></property>
+	 	<property name="deleteSwitch" value = "True"></property>
+	 	<property name="querySwitch" value = "False"></property>
+	 </bean>
+	 
+	 <bean id="compmimic" class = "com.five9.service.CompConn" >
+	 	<property name="mysqlPara" ref="mysqlPara"></property>
+	 	<property name="updateSql" value ="insert into compRateplan(accounts,vcc,ls) 
+												select vcc.account,vcc.plan,ls_mysqlmimic.plan from vcc,ls_mysqlmimic 	
+													where vcc.account = ls_mysqlmimic.accounts 
+															and vcc.plan!=ls_mysqlmimic.plan"></property>
+	 	<property name="querySql" value = "select vcc.account,vcc.plan,ls_mysqlmimic.plan from vcc,ls_mysqlmimic 	
+													where vcc.account = ls_mysqlmimic.accounts 
+															and vcc.plan!=ls_mysqlmimic.plan"></property>
+	 	<property name="deleteSql" value = "delete from compRateplan"></property>
+	 	<property name="batchInsertionSql" value = "insert into compRateplan(accounts,vcc,ls) values(?,?,?)"></property>
+	 	<property name="path" value = "Output/RatePlanComparison.xlsx"></property>
+	 	<property name="deleteSwitch" value = "True"></property>
+	 	<property name="exportSwitch" value = "False"></property>
+	 	<property name="querySwitch" value = "True"></property>
+	 	<property name="updateDBSwitch" value = "False"></property>
+	 </bean> 
+	 <!--end of mysql mimuc test purpose  -->
+	 
+	 
+	 
+	 
+	<bean id = "mssqlPara" class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name = "driverClassName" value = "com.microsoft.sqlserver.jdbc.SQLServerDriver"></property>
+		<property name = "url" value = "jdbc:sqlserver://10.7.42.13:1433;databasename=EngageIp"></property>
+		<property name = "username" value = "OSS"></property>
+		<property name = "password" value = "p@ssw0rD1"></property>
+	</bean>
+	
+	 <bean id="mysqlPara" 
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/rateplancomparison" />
+		<property name="username" value="root" />
+		<property name="password" value="123" />
+	</bean>
+</beans>
