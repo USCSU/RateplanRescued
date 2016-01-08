@@ -39,7 +39,8 @@ public class LsVccCmpConn extends DatabaseConnection implements Conn {
 		}
 		if(this.updateDBSwitch){
 			System.out.println("	inserting data .....");
-			batchInsertion();
+//			batchInsertion();
+			update();
 			System.out.println("	Insertion done!.....");
 		}
 		if(this.exportSwitch){
@@ -79,11 +80,15 @@ public class LsVccCmpConn extends DatabaseConnection implements Conn {
             			ret.add(rs.getString(1));
             			ret.add(rs.getString(2));
             			ret.add(rs.getString(3));
+            			ret.add(rs.getString(4));
             		return ret;
             }
        });
 		System.out.println(data);
 	}
+	
+	
+	//setters and getters
 	public DataSource getMysqlPara() {
 		return mysqlPara;
 	}

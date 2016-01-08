@@ -31,10 +31,12 @@ public class ReadWriteCSV_XLSX {
 		title.createCell(0).setCellValue("accounts");
 		title.createCell(1).setCellValue("pbe");
 		title.createCell(2).setCellValue("ls");
+		title.createCell(3).setCellValue("zuora");
 		
 		for(int i =0;i<data.size();i++){
 			 Row rowtemp = sheet.createRow(++num);
 			 for(int j =0;j<data.get(i).size();j++){
+				 if(data.get(i).get(j)==null) data.get(i).set(j, "NOT FOUND");
 				 rowtemp.createCell(j).setCellValue(data.get(i).get(j));
 			 }
 		}
@@ -58,11 +60,13 @@ public class ReadWriteCSV_XLSX {
 		 row.createCell(0).setCellValue("accounts");;
 		 row.createCell(1).setCellValue("Vcc");;
 		 row.createCell(2).setCellValue("Logisense");
+		 row.createCell(3).setCellValue("zuora");
 		 
 		 //set up content
 		 for(int i =0;i<data.size();i++){
 			 Row rowtemp = sheet.createRow(i+1);
 			 for(int j =0;j<data.get(i).size();j++){
+				 if(data.get(i).get(j)==null) data.get(i).set(j, "NOT FOUND");
 				 rowtemp.createCell(j).setCellValue(data.get(i).get(j));
 			 }
 		 }

@@ -32,6 +32,9 @@
 	  <bean id = "lspbecmp" class = "com.five9.consumer.DBConnection">
 		<property name="connection" ref = "lspbe"></property>
 	</bean> 
+	  <bean id = "zuora" class = "com.five9.consumer.DBConnection">
+		<property name="connection" ref = "zuoramysql"></property>
+	</bean> 
 	
 	<!--end of bean for ls mssql mimic -->
 	
@@ -55,7 +58,7 @@
 	 	<property name="updateSql" value =""></property>
 	 	<property name="querySql" value = "select * from vcc"></property>
 	 	<property name="deleteSql" value = "delete from vcc"></property>
-	 	<property name="batchInsertionSql" value = "insert into vcc(account,plan) values(?,?)"></property>
+	 	<property name="batchInsertionSql" value = "insert into vcc(accounts,plan) values(?,?)"></property>
 	 	<property name="path" value = "Input/VccaccountRateplan.csv"></property>
 	 	<property name="deleteSwitch" value = "True"></property>
 	 	<property name="querySwitch" value = "False"></property>
@@ -68,9 +71,9 @@
 	 <bean id = "lsmysqlmimic" class = "com.five9.service.LsMysqlMimicConn" >
 	 	<property name="mysqlPara" ref="mysqlPara"></property>
 	 	<property name="updateSql" value =""></property>
-	 	<property name="querySql" value = "select * from ls_mysqlmimic"></property>
-	 	<property name="deleteSql" value = "delete from ls_mysqlmimic"></property>
-	 	<property name="batchInsertionSql" value = "insert into ls_mysqlmimic(accounts,plan) values(?,?)"></property>
+	 	<property name="querySql" value = "select * from ls"></property>
+	 	<property name="deleteSql" value = "delete from ls"></property>
+	 	<property name="batchInsertionSql" value = "insert into ls(accounts,plan) values(?,?)"></property>
 	 	<property name="path" value = "Input/LSaccountRateplan.xlsx"></property>
 	 	<property name="deleteSwitch" value = "True"></property>
 	 	<property name="querySwitch" value = "False"></property>
@@ -85,18 +88,42 @@
 	 	<property name="deleteSwitch" value = "True"></property>
 	 	<property name="querySwitch" value = "False"></property>
 	 </bean>
+	 <bean id = "zuoramysql" class = "com.five9.service.ZuoraMysqlConn" >
+	 	<property name="mysqlPara" ref="mysqlPara"></property>
+	 	<property name="updateSql" value =""></property>
+	 	<property name="querySql" value = "select * from zuora"></property>
+	 	<property name="deleteSql" value = "delete from zuora"></property>
+	 	<property name="batchInsertionSql" value = "insert into zuora(accounts,plan) values(?,?)"></property>
+	 	<property name="path" value = "Input/zuora.xlsx"></property>
+	 	<property name="deleteSwitch" value = "True"></property>
+	 	<property name="querySwitch" value = "False"></property>
+	 </bean>
 	 
 	 <bean id="lsvcc" class = "com.five9.service.LsVccCmpConn" >
 	 	<property name="mysqlPara" ref="mysqlPara"></property>
-	 	<property name="updateSql" value ="insert into ls_vcc_comp(accounts,vcc,ls) 
-												select vcc.account,vcc.plan,ls_mysqlmimic.plan from vcc,ls_mysqlmimic 	
-													where vcc.account = ls_mysqlmimic.accounts 
-															and vcc.plan!=ls_mysqlmimic.plan"></property>
-	 	<property name="querySql" value = "select vcc.account,vcc.plan,ls_mysqlmimic.plan from vcc,ls_mysqlmimic 	
-													where vcc.account = ls_mysqlmimic.accounts 
-															and vcc.plan!=ls_mysqlmimic.plan"></property>
-	 	<property name="deleteSql" value = "delete from ls_vcc_comp"></property>
-	 	<property name="batchInsertionSql" value = "insert into ls_vcc_comp(accounts,vcc,ls) values(?,?,?)"></property>
+	 	<!-- Vernon idea
+	 	select vcc.accounts,vcc.plan as vcc , ls.plan as ls ,zuora.plan as zuora  from vcc inner join ls
+    			on vcc.accounts = ls.accounts and vcc.plan != ls.plan
+    				left join zuora
+        				on vcc.accounts = zuora.accounts  
+         Dhaval logic
+         select vcc.accounts,vcc.plan as vcc , ls.plan as ls ,zuora.plan as zuora  from vcc inner join ls
+    			on vcc.accounts = ls.accounts   
+    				left join zuora
+        				on vcc.accounts = zuora.accounts  
+        					where not (vcc.plan = ls.plan and vcc.plan = zuora.plan)
+	 	-->
+	 	<property name="updateSql" value ="insert into ls_vcc_zuora_comp(accounts,vcc,ls,zuora) 
+												select vcc.accounts,vcc.plan as vcc , ls.plan as ls ,zuora.plan as zuora  from vcc inner join ls
+    												on vcc.accounts = ls.accounts and vcc.plan != ls.plan
+    													left join zuora
+        													on vcc.accounts = zuora.accounts "></property>
+	 	<property name="querySql" value = "select vcc.accounts,vcc.plan as vcc , ls.plan as ls ,zuora.plan as zuora  from vcc inner join ls
+    												on vcc.accounts = ls.accounts and vcc.plan != ls.plan
+    													left join zuora
+        													on vcc.accounts = zuora.accounts  "></property>
+	 	<property name="deleteSql" value = "delete from ls_vcc_zuora_comp"></property>
+	 	<property name="batchInsertionSql" value = "insert into ls_vcc_zuora_comp(accounts,vcc,ls,zuora) values(?,?,?,?)"></property>
 	 	<property name="path" value = "Output/RatePlanComparison.xls"></property>
 	 	<property name="deleteSwitch" value = "True"></property>
 	 	<property name="exportSwitch" value = "True"></property>
@@ -105,15 +132,17 @@
 	 </bean> 
 	 <bean id="lspbe" class = "com.five9.service.LsPbeCmpConn" >
 	 	<property name="mysqlPara" ref="mysqlPara"></property>
-	 	<property name="updateSql" value ="insert into ls_pbe_comp(accounts,pbe,ls) 
-												select pbe.account,pbe.plan,ls_mysqlmimic.plan from pbe,ls_mysqlmimic 	
-													where pbe.accounts = ls_mysqlmimic.accounts 
-															and pbe.plan!=ls_mysqlmimic.plan"></property>
-	 	<property name="querySql" value = "select pbe.accounts,pbe.plan,ls_mysqlmimic.plan from pbe,ls_mysqlmimic 	
-													where pbe.accounts = ls_mysqlmimic.accounts 
-															and pbe.plan!=ls_mysqlmimic.plan"></property>
-	 	<property name="deleteSql" value = "delete from ls_pbe_comp"></property>
-	 	<property name="batchInsertionSql" value = "insert into ls_pbe_comp(accounts,pbe,ls) values(?,?,?)"></property>
+	 	<property name="updateSql" value ="insert into ls_pbe_zuora_comp(accounts,pbe,ls,zuora) 
+												select pbe.accounts,pbe.plan as pbe , ls.plan as ls ,zuora.plan as zuora  from pbe inner join ls
+    												on pbe.accounts = ls.accounts and pbe.plan != ls.plan
+    													left join zuora
+        													on pbe.accounts = zuora.accounts "></property>
+	 	<property name="querySql" value = "select pbe.accounts,pbe.plan as pbe , ls.plan as ls ,zuora.plan as zuora  from pbe inner join ls
+    												on pbe.accounts = ls.accounts and pbe.plan != ls.plan
+    													left join zuora
+        													on pbe.accounts = zuora.accounts "></property>
+	 	<property name="deleteSql" value = "delete from ls_pbe_zuora_comp"></property>
+	 	<property name="batchInsertionSql" value = "insert into ls_pbe_zuora_comp(accounts,pbe,ls,zuora) values(?,?,?,?)"></property>
 	 	<property name="path" value = "Output/RatePlanComparison.xls"></property>
 	 	<property name="deleteSwitch" value = "True"></property>
 	 	<property name="exportSwitch" value = "True"></property>

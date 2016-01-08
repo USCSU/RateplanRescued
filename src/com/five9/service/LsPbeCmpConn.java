@@ -35,7 +35,8 @@ public class LsPbeCmpConn extends DatabaseConnection implements Conn {
 		}
 		if(this.updateDBSwitch){
 			System.out.println("	inserting data .....");
-			batchInsertion();
+//			batchInsertion();
+			update();
 			System.out.println("	Insertion done!.....");
 		}
 		if(this.exportSwitch){
@@ -52,6 +53,7 @@ public class LsPbeCmpConn extends DatabaseConnection implements Conn {
 		if(data == null || data.isEmpty() ) throw new IllegalArgumentException("no data in database when comparing datas");
 		this.jdbctemplate.update(updateSql);
 	}
+	//for batch insertion
 	public void batchInsertion(){
 		this.jdbctemplate.batchUpdate(batchInsertionSql, new BatchPreparedStatementSetter(){
 			@Override
@@ -75,6 +77,7 @@ public class LsPbeCmpConn extends DatabaseConnection implements Conn {
             			ret.add(rs.getString(1));
             			ret.add(rs.getString(2));
             			ret.add(rs.getString(3));
+            			ret.add(rs.getString(4));
             		return ret;
             }
        });
