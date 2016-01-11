@@ -149,7 +149,7 @@ public class ReadWriteCSV_XLSX {
 		return ret;
 	}
 	//zuora operation
-	 
+	 /*
 	public static void rewriteZuora(String inputpath,String outputpath){
 		System.out.println("Rewriting zuora file...");
 		writeZuora(inputpath,outputpath,readZuora(inputpath));
@@ -194,14 +194,14 @@ public class ReadWriteCSV_XLSX {
 			}
 			 
 		}
-	
-	public  static List<List<String>> readZuora(String inputpath){
+	*/
+	public  static List<List<String>> readZuora(String path){
 			List<List<String>> ret = new LinkedList<List<String>>();
 			HashSet<String> checker = new HashSet<String>();
 			try {
 				XSSFWorkbook workbook;
-				workbook = (XSSFWorkbook) WorkbookFactory.create(new FileInputStream(inputpath));
-				XSSFSheet sheet = workbook.getSheetAt(1);
+				workbook = (XSSFWorkbook) WorkbookFactory.create(new FileInputStream(path));
+				XSSFSheet sheet = workbook.getSheetAt(0);
 //				HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(inputpath));
 //				HSSFSheet sheet = workbook.getSheetAt(1);
 //				for(Row row:sheet){
@@ -210,6 +210,7 @@ public class ReadWriteCSV_XLSX {
 					DataFormatter formatter = new DataFormatter();
 					String key = formatter.formatCellValue(sheet.getRow(i).getCell(0));
 					String value = formatter.formatCellValue(sheet.getRow(i).getCell(1));
+					if(checker.contains(key)&&value.isEmpty()) continue;
 					checker.add(key);
 					List<String> list = new LinkedList<String>();
 					list.add(key);
@@ -217,17 +218,17 @@ public class ReadWriteCSV_XLSX {
 					ret.add(list);
 				}
 				
-				sheet = workbook.getSheetAt(2);
-				for(int i =0;i<sheet.getLastRowNum();i++){
-					DataFormatter formatter = new DataFormatter();
-					String key = formatter.formatCellValue(sheet.getRow(i).getCell(0));
-					String value = formatter.formatCellValue(sheet.getRow(i).getCell(1));
-					if(checker.contains(key)) continue;
-					List<String> list = new LinkedList<String>();
-					list.add(key);
-					list.add(value);
-					ret.add(list);
-				}
+//				sheet = workbook.getSheetAt(2);
+//				for(int i =0;i<sheet.getLastRowNum();i++){
+//					DataFormatter formatter = new DataFormatter();
+//					String key = formatter.formatCellValue(sheet.getRow(i).getCell(0));
+//					String value = formatter.formatCellValue(sheet.getRow(i).getCell(1));
+//					if(checker.contains(key)) continue;
+//					List<String> list = new LinkedList<String>();
+//					list.add(key);
+//					list.add(value);
+//					ret.add(list);
+//				}
 	        
 			}  catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block

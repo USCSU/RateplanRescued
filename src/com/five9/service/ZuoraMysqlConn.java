@@ -26,16 +26,16 @@ public class ZuoraMysqlConn extends DatabaseConnection implements Conn{
 			this.delete();
 		
 		readCSV_XLSX();
-		importDataToDB(outputpath,data);
+		importDataToDB(data);
 		if(this.querySwitch)
 			query();
 	}
 	
 	protected void readCSV_XLSX(){
 		 System.out.println("Reading data from zuora csv/xlsx file....");
-		 ReadWriteCSV_XLSX.rewriteZuora(inputpath,outputpath);
+//		 ReadWriteCSV_XLSX.rewriteZuora(inputpath,outputpath);
 		 //static function here 
-		 data =  ReadWriteCSV_XLSX.readZuora(outputpath);
+		 data =  ReadWriteCSV_XLSX.readZuora(inputpath);
 		 System.out.println("Done reading file.");
 	 }
 	

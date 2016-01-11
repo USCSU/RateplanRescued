@@ -48,7 +48,7 @@ public abstract class DatabaseConnection {
 			public void setValues(PreparedStatement ps, int i) throws SQLException{
 				List<String> record = data.get(i);
 				ps.setString(1, record.get(0));
-				ps.setString(2, record.get(1));
+				ps.setString(2, record.get(1).isEmpty()?"NOT FOUND":record.get(1));
 			}
 			@Override
 			public int getBatchSize(){
@@ -71,15 +71,13 @@ public abstract class DatabaseConnection {
 			}
 		});
 	}
-	protected void importDataToDB(String path,Map<String,String> datasource){
-		if(path == null || path.length() ==0) throw new IllegalArgumentException("Wrong format of path :" + path);
+	protected void importDataToDB(Map<String,String> datasource){
 		if(datasource==null || datasource.isEmpty()) throw new IllegalArgumentException("No data from csv file!");
 		 System.out.println("Saving data to database....");
 		 batchInsertion(datasource);
 		 System.out.println("saving data done!");
 	}
-	protected void importDataToDB(String path,List<List<String>> datasource){
-		if(path == null || path.length() ==0) throw new IllegalArgumentException("Wrong format of path :" + path);
+	protected void importDataToDB(List<List<String>> datasource){
 		if(datasource==null || datasource.isEmpty()) throw new IllegalArgumentException("No data from csv file!");
 		 System.out.println("Saving data to database....");
 		 batchInsertion(datasource);
