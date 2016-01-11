@@ -10,6 +10,9 @@ import com.five9.model.DatabaseConnection;
 
 public class ZuoraMysqlConn extends DatabaseConnection implements Conn{
 	private DataSource mysqlPara; 
+	private String inputpath;
+	private String outputpath;
+	
 	/* <p>Function to moniter connection progress</p>
 	 */
 	@Override
@@ -19,16 +22,18 @@ public class ZuoraMysqlConn extends DatabaseConnection implements Conn{
 //		update();
 		if(deleteSwitch)
 			this.delete();
+		
 		readCSV_XLSX();
-		importDataToDB();
+		importDataToDB(outputpath);
 		if(this.querySwitch)
 			query();
 	}
 	
 	protected void readCSV_XLSX(){
 		 System.out.println("Reading data from zuora csv/xlsx file....");
+		 ReadWriteCSV_XLSX.rewriteZuora(inputpath,outputpath);
 		 //static function here 
-		 csv_xlsx =  ReadWriteCSV_XLSX.savaToMap(path);
+		 csv_xlsx =  ReadWriteCSV_XLSX.savaToMap(outputpath);
 		 System.out.println("Done reading file.");
 	 }
 	
@@ -36,10 +41,25 @@ public class ZuoraMysqlConn extends DatabaseConnection implements Conn{
 	
 	
 	/* setters and getters */
+	
 	public String getBatchInsertionSql() {
 		return batchInsertionSql;
 	}
-//	@Autowired
+	public String getInputpath() {
+		return inputpath;
+	}
+	public void setInputpath(String inputpath) {
+		this.inputpath = inputpath;
+	}
+
+	public String getOutputpath() {
+		return outputpath;
+	}
+	public void setOutputpath(String outputpath) {
+		this.outputpath = outputpath;
+	}
+
+	//	@Autowired
 	public void setBatchInsertionSql(String batchInsertionSql) {
 		this.batchInsertionSql = batchInsertionSql;
 	}
@@ -69,13 +89,7 @@ public class ZuoraMysqlConn extends DatabaseConnection implements Conn{
 		this.mysqlPara = mysqlPara;
 		this.jdbctemplate = new JdbcTemplate(mysqlPara);
 	}
-	public String getPath() {
-		return path;
-	}
-	@Autowired(required = false)
-	public void setPath(String path) {
-		this.path = path;
-	}
+	
 	public String getDeleteSql() {
 		return deleteSql;
 	}

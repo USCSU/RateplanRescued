@@ -94,7 +94,8 @@
 	 	<property name="querySql" value = "select * from zuora"></property>
 	 	<property name="deleteSql" value = "delete from zuora"></property>
 	 	<property name="batchInsertionSql" value = "insert into zuora(accounts,plan) values(?,?)"></property>
-	 	<property name="path" value = "Input/zuora.xlsx"></property>
+	 	<property name="inputpath" value = "Input/zuora.xlsx"></property>
+	 	<property name="outputpath" value = "Input/zuoraoutput.xls"></property>
 	 	<property name="deleteSwitch" value = "True"></property>
 	 	<property name="querySwitch" value = "False"></property>
 	 </bean>

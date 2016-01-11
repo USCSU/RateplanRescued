@@ -20,7 +20,7 @@ public class pbeMysqlConn extends DatabaseConnection implements Conn {
 		if(deleteSwitch)
 			this.delete();
 		readCSV_XLSX();
-		importDataToDB();
+		importDataToDB(path);
 		if(this.querySwitch)
 			query();
 	}

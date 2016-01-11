@@ -21,7 +21,7 @@ public class LsMysqlMimicConn extends DatabaseConnection implements Conn {
 //		update();
 		if(deleteSwitch) this.delete();
 		readCSV_XLSX();
-		importDataToDB();
+		importDataToDB(path);
 		if(this.querySwitch) query();
 	}
 	

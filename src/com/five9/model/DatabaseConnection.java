@@ -3,7 +3,6 @@ package com.five9.model;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +10,6 @@ import java.util.Map;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-
-import com.five9.service.ReadWriteCSV_XLSX;
 
 public abstract class DatabaseConnection {
 	
@@ -67,7 +64,7 @@ public abstract class DatabaseConnection {
 			}
 		});
 	}
-	protected void importDataToDB(){
+	protected void importDataToDB(String path){
 		if(path == null || path.length() ==0) throw new IllegalArgumentException("Wrong format of path :" + path);
 		if(csv_xlsx==null || csv_xlsx.isEmpty()) throw new IllegalArgumentException("No data from csv file!");
 		 System.out.println("Saving data to database....");
@@ -77,8 +74,5 @@ public abstract class DatabaseConnection {
 	 protected void readCSV_XLSX(){
 		 
 	 }
-	/* <p>Function to moniter connection progress </p> 
-	 * @param none
-	 *
-	 * */
+	
 }
