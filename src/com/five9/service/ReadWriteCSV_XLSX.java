@@ -159,12 +159,12 @@ public class ReadWriteCSV_XLSX {
 	private  static void writeZuora(String inputpath,String outputpath, List<List<String>> data){
 		 
 			
-//			XSSFWorkbook workbook;
+			XSSFWorkbook workbook;
 			try {
-//				workbook = (XSSFWorkbook) WorkbookFactory.create();
-//				XSSFSheet sheet = workbook.createSheet("zuoraAccPlan");
-				HSSFWorkbook workbook = new HSSFWorkbook();
-				HSSFSheet sheet = workbook.createSheet();
+				workbook = (XSSFWorkbook) WorkbookFactory.create(new FileInputStream(inputpath));
+				XSSFSheet sheet = workbook.createSheet("zuoraAccPlan");
+//				HSSFWorkbook workbook = new HSSFWorkbook();
+//				HSSFSheet sheet = workbook.createSheet();
 				//set up title
 				Row row = sheet.createRow(0);
 				row.createCell(0).setCellValue("accounts");;
@@ -188,17 +188,22 @@ public class ReadWriteCSV_XLSX {
 			} catch ( IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			} catch (InvalidFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			 
 		}
 	
-	private  static List<List<String>> readZuora(String inputpath){
+	public  static List<List<String>> readZuora(String inputpath){
 			List<List<String>> ret = new LinkedList<List<String>>();
 			HashSet<String> checker = new HashSet<String>();
 			try {
 				XSSFWorkbook workbook;
 				workbook = (XSSFWorkbook) WorkbookFactory.create(new FileInputStream(inputpath));
 				XSSFSheet sheet = workbook.getSheetAt(1);
+//				HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(inputpath));
+//				HSSFSheet sheet = workbook.getSheetAt(1);
 //				for(Row row:sheet){
 				//starts from 2nd row since 1st row is title
 				for(int i =0;i<sheet.getLastRowNum();i++){
@@ -233,7 +238,7 @@ public class ReadWriteCSV_XLSX {
 			} catch (InvalidFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}  
 			return ret;
 	}
 	 

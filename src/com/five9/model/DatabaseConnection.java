@@ -40,16 +40,23 @@ public abstract class DatabaseConnection {
             }
        });
 		System.out.println(data);
-//		 for(Map<String,Object> map:ret){
-//			 System.out.println("---------");
-//			 Iterator<String> iterator = map.keySet().iterator();
-//			 while(iterator.hasNext()){
-//				 String key = iterator.next();
-//				 System.out.println(key + "->" + map.get(key));
-//			 }
-//		 }
 	}
-	private void batchInsertion(){
+	private void batchInsertion(List<List<String>> data){
+		if(data == null || data.isEmpty()) throw new IllegalArgumentException("data is not valid when batchinsertion list");
+		this.jdbctemplate.batchUpdate(batchInsertionSql, new BatchPreparedStatementSetter(){
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException{
+				List<String> record = data.get(i);
+				ps.setString(1, record.get(0));
+				ps.setString(2, record.get(1));
+			}
+			@Override
+			public int getBatchSize(){
+				return data.size();
+			}
+		});
+	}
+	private void batchInsertion(Map<String,String> data){
 		this.jdbctemplate.batchUpdate(batchInsertionSql, new BatchPreparedStatementSetter(){
 			Object[] keys = csv_xlsx.keySet().toArray();
 			@Override
@@ -64,11 +71,18 @@ public abstract class DatabaseConnection {
 			}
 		});
 	}
-	protected void importDataToDB(String path){
+	protected void importDataToDB(String path,Map<String,String> datasource){
 		if(path == null || path.length() ==0) throw new IllegalArgumentException("Wrong format of path :" + path);
-		if(csv_xlsx==null || csv_xlsx.isEmpty()) throw new IllegalArgumentException("No data from csv file!");
+		if(datasource==null || datasource.isEmpty()) throw new IllegalArgumentException("No data from csv file!");
 		 System.out.println("Saving data to database....");
-		 batchInsertion();
+		 batchInsertion(datasource);
+		 System.out.println("saving data done!");
+	}
+	protected void importDataToDB(String path,List<List<String>> datasource){
+		if(path == null || path.length() ==0) throw new IllegalArgumentException("Wrong format of path :" + path);
+		if(datasource==null || datasource.isEmpty()) throw new IllegalArgumentException("No data from csv file!");
+		 System.out.println("Saving data to database....");
+		 batchInsertion(datasource);
 		 System.out.println("saving data done!");
 	}
 	 protected void readCSV_XLSX(){

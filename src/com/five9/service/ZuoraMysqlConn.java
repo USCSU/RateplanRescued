@@ -1,5 +1,7 @@
 package com.five9.service;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,7 @@ public class ZuoraMysqlConn extends DatabaseConnection implements Conn{
 	private DataSource mysqlPara; 
 	private String inputpath;
 	private String outputpath;
-	
+	private List<List<String>> data;
 	/* <p>Function to moniter connection progress</p>
 	 */
 	@Override
@@ -24,7 +26,7 @@ public class ZuoraMysqlConn extends DatabaseConnection implements Conn{
 			this.delete();
 		
 		readCSV_XLSX();
-		importDataToDB(outputpath);
+		importDataToDB(outputpath,data);
 		if(this.querySwitch)
 			query();
 	}
@@ -33,7 +35,7 @@ public class ZuoraMysqlConn extends DatabaseConnection implements Conn{
 		 System.out.println("Reading data from zuora csv/xlsx file....");
 		 ReadWriteCSV_XLSX.rewriteZuora(inputpath,outputpath);
 		 //static function here 
-		 csv_xlsx =  ReadWriteCSV_XLSX.savaToMap(outputpath);
+		 data =  ReadWriteCSV_XLSX.readZuora(outputpath);
 		 System.out.println("Done reading file.");
 	 }
 	
