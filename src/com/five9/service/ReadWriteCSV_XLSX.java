@@ -130,10 +130,11 @@ public class ReadWriteCSV_XLSX {
 		Map<String,String> ret = new HashMap<String,String>();
 //			XSSFWorkbook workbook;
 //			workbook = (XSSFWorkbook) WorkbookFactory.create(new FileInputStream(path));
-			HSSFWorkbook workbook;
 			try {
-				workbook = new HSSFWorkbook(new FileInputStream(path));
-				HSSFSheet sheet = workbook.getSheetAt(0);
+				XSSFWorkbook workbook;
+				workbook = (XSSFWorkbook) WorkbookFactory.create(new FileInputStream(path));
+//				workbook = new HSSFWorkbook(new FileInputStream(path));
+				XSSFSheet sheet = workbook.getSheetAt(0);
 //			for(Row row:sheet){
 				//starts from 2nd row since 1st row is title
 				for(int i =1;i<sheet.getLastRowNum();i++){
@@ -141,6 +142,9 @@ public class ReadWriteCSV_XLSX {
 					ret.put(formatter.formatCellValue(sheet.getRow(i).getCell(0)),formatter.formatCellValue(sheet.getRow(i).getCell(1)));
 				}
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvalidFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -210,8 +214,9 @@ public class ReadWriteCSV_XLSX {
 					DataFormatter formatter = new DataFormatter();
 					String key = formatter.formatCellValue(sheet.getRow(i).getCell(0));
 					String value = formatter.formatCellValue(sheet.getRow(i).getCell(1));
-					if(checker.contains(key)&&value.isEmpty()) continue;
+					if((checker.contains(key)&&value.isEmpty())) continue;
 					checker.add(key);
+//					if(value.equals("Custom")) continue; //filter "custom" out, will be removed in the future
 					List<String> list = new LinkedList<String>();
 					list.add(key);
 					list.add(value);

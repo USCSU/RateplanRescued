@@ -86,7 +86,13 @@ public class LsMSsqlConn extends DatabaseConnection implements Conn{
 	public void setQuerySwitch(boolean querySwitch) {
 		this.querySwitch = querySwitch;
 	}
-	
+	public boolean isDbInsertSwitch() {
+		return dbInsertSwitch;
+	}
+
+	public void setDbInsertSwitch(boolean dbInsertSwitch) {
+		this.dbInsertSwitch = dbInsertSwitch;
+	}
 	 
 		
 }

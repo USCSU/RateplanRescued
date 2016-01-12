@@ -24,9 +24,10 @@ public class ZuoraMysqlConn extends DatabaseConnection implements Conn{
 //		update();
 		if(deleteSwitch)
 			this.delete();
-		
-		readCSV_XLSX();
-		importDataToDB(data);
+		if(this.dbInsertSwitch){
+			readCSV_XLSX();
+			importDataToDB(data);
+		}
 		if(this.querySwitch)
 			query();
 	}
@@ -104,14 +105,18 @@ public class ZuoraMysqlConn extends DatabaseConnection implements Conn{
 	public void setDeleteSwitch(boolean deleteSwitch) {
 		this.deleteSwitch = deleteSwitch;
 	}
-
-
 	public boolean isQuerySwitch() {
 		return querySwitch;
 	}
-
-
 	public void setQuerySwitch(boolean querySwitch) {
 		this.querySwitch = querySwitch;
+	}
+
+	public boolean isDbInsertSwitch() {
+		return dbInsertSwitch;
+	}
+
+	public void setDbInsertSwitch(boolean dbInsertSwitch) {
+		this.dbInsertSwitch = dbInsertSwitch;
 	}
 }

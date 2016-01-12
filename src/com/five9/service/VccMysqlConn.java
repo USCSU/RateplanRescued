@@ -14,6 +14,7 @@ import com.five9.model.DatabaseConnection;
 public class VccMysqlConn extends DatabaseConnection implements Conn{
 	 
 	private DataSource mysqlPara; 
+
 	/* <p>Function to moniter connection progress</p>
 	 */
 	@Override
@@ -23,8 +24,10 @@ public class VccMysqlConn extends DatabaseConnection implements Conn{
 //		update();
 		if(deleteSwitch)
 			this.delete();
-		readCSV_XLSX();
-		importDataToDB(csv_xlsx);
+		if(dbInsertSwitch){
+			readCSV_XLSX();
+			importDataToDB(csv_xlsx);
+		}
 		if(this.querySwitch)
 			query();
 	}
@@ -98,9 +101,15 @@ public class VccMysqlConn extends DatabaseConnection implements Conn{
 		return querySwitch;
 	}
 
-
 	public void setQuerySwitch(boolean querySwitch) {
 		this.querySwitch = querySwitch;
+	}
+	public boolean isDbInsertSwitch() {
+		return dbInsertSwitch;
+	}
+
+	public void setDbInsertSwitch(boolean dbInsertSwitch) {
+		this.dbInsertSwitch = dbInsertSwitch;
 	}
 
 	 

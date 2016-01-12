@@ -21,6 +21,7 @@ public abstract class DatabaseConnection {
 	protected String deleteSql;
 	protected boolean deleteSwitch;
 	protected boolean querySwitch;
+	protected boolean dbInsertSwitch;
 	protected Map<String,String> csv_xlsx;
 	
 	public void update(){

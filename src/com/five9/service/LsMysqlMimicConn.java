@@ -20,8 +20,10 @@ public class LsMysqlMimicConn extends DatabaseConnection implements Conn {
 		System.out.println("Echo from ls mssql mimic server.......");
 //		update();
 		if(deleteSwitch) this.delete();
-		readCSV_XLSX();
-		importDataToDB(csv_xlsx);
+		if(dbInsertSwitch){
+			readCSV_XLSX();
+			importDataToDB(csv_xlsx);
+		}
 		if(this.querySwitch) query();
 	}
 	
@@ -98,6 +100,12 @@ public class LsMysqlMimicConn extends DatabaseConnection implements Conn {
 	public void setQuerySwitch(boolean querySwitch) {
 		this.querySwitch = querySwitch;
 	}
-	
+	public boolean isDbInsertSwitch() {
+		return dbInsertSwitch;
+	}
+
+	public void setDbInsertSwitch(boolean dbInsertSwitch) {
+		this.dbInsertSwitch = dbInsertSwitch;
+	}
 
 }

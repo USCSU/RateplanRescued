@@ -8,6 +8,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,16 +19,34 @@ import com.five9.model.DatabaseConnection;
 
 public class LsPbeCmpConn extends DatabaseConnection implements Conn {
 	private DataSource mysqlPara;
+	@Autowired
+	@Qualifier(value = "lsmysqlmimic")
+	private LsMysqlMimicConn ls;
+	@Autowired
+	@Qualifier(value = "zuoramysql")
+	private ZuoraMysqlConn zuora;
+	@Autowired
+	@Qualifier(value = "pbemysql")
+	private pbeMysqlConn pbe;
+	
 	private boolean exportSwitch;
 	private boolean updateDBSwitch;
 	private List<List<String>> data;
 	public void moniter() {
 		// TODO Auto-generated method stub
-		System.out.println("This is echo for monitering process of comparison");
+		System.out.println("This is echo for ls pbe monitering process of comparison");
 		if(this.deleteSwitch) {
 			System.out.println("	deleting.....");
 			this.delete();
 			System.out.println("	Deletion done!");
+		}
+		if(this.dbInsertSwitch){
+			System.out.println("	inserting.....");
+			ls.moniter();
+			pbe.moniter();
+			zuora.moniter();
+			System.out.println("	Insertion done!");
+			
 		}
 		if(this.querySwitch){
 			System.out.println("	Querying data....");
@@ -147,5 +167,12 @@ public class LsPbeCmpConn extends DatabaseConnection implements Conn {
 	}
 	public void setQuerySwitch(boolean querySwitch) {
 		this.querySwitch = querySwitch;
+	}
+	public boolean isDbInsertSwitch() {
+		return dbInsertSwitch;
+	}
+
+	public void setDbInsertSwitch(boolean dbInsertSwitch) {
+		this.dbInsertSwitch = dbInsertSwitch;
 	}
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,17 +21,36 @@ import com.five9.model.DatabaseConnection;
 public class LsVccCmpConn extends DatabaseConnection implements Conn {
 	@Autowired
 	private DataSource mysqlPara;
+	@Autowired
+	@Qualifier(value = "lsmysqlmimic")
+	private LsMysqlMimicConn ls;
+	@Autowired
+	@Qualifier(value = "zuoramysql")
+	private ZuoraMysqlConn zuora;
+	@Autowired
+	@Qualifier(value = "vccmysql")
+	private VccMysqlConn vcc;
+	
+	
 	private boolean exportSwitch;
 	private boolean updateDBSwitch;
 	private List<List<String>> data;
 	@Override
 	public void moniter() {
 		// TODO Auto-generated method stub
-		System.out.println("This is echo for monitering process of comparison");
+		System.out.println("This is echo for ls vcc monitering process of comparison");
 		if(this.deleteSwitch) {
 			System.out.println("	deleting.....");
 			this.delete();
 			System.out.println("	Deletion done!");
+		}
+		if(this.dbInsertSwitch){
+			System.out.println("	inserting.....");
+			ls.moniter();
+			vcc.moniter();
+			zuora.moniter();
+			System.out.println("	Insertion done!");
+			
 		}
 		if(this.querySwitch){
 			System.out.println("	Querying data....");
@@ -150,5 +170,11 @@ public class LsVccCmpConn extends DatabaseConnection implements Conn {
 	public void setQuerySwitch(boolean querySwitch) {
 		this.querySwitch = querySwitch;
 	}
+	public boolean isDbInsertSwitch() {
+		return dbInsertSwitch;
+	}
 
+	public void setDbInsertSwitch(boolean dbInsertSwitch) {
+		this.dbInsertSwitch = dbInsertSwitch;
+	}
 }

@@ -16,14 +16,14 @@ public class RatePlanApp {
 //		mssalMimic.moniter();
 //		DBConnection pbe  = (DBConnection) ctx.getBean("pbemimic");
 //		pbe.moniter();
-		DBConnection zuora  = (DBConnection) ctx.getBean("zuora");
-		zuora.moniter();
+//		DBConnection zuora  = (DBConnection) ctx.getBean("zuora");
+//		zuora.moniter();
 		
-//		DBConnection lsvcccmp  = (DBConnection) ctx.getBean("lsvcccmp");
-//		lsvcccmp.moniter();
+		DBConnection lsvcccmp  = (DBConnection) ctx.getBean("lsvcccmp");
+		lsvcccmp.moniter();
 //		
-//		DBConnection lspbecmp  = (DBConnection) ctx.getBean("lspbecmp");
-//		lspbecmp.moniter();
+		DBConnection lspbecmp  = (DBConnection) ctx.getBean("lspbecmp");
+		lspbecmp.moniter();
 //		
 		}
 	}

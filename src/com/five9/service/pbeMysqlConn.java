@@ -19,8 +19,10 @@ public class pbeMysqlConn extends DatabaseConnection implements Conn {
 //		update();
 		if(deleteSwitch)
 			this.delete();
-		readCSV_XLSX();
-		importDataToDB(csv_xlsx);
+		if(dbInsertSwitch){
+			readCSV_XLSX();
+			importDataToDB(csv_xlsx);
+		}
 		if(this.querySwitch)
 			query();
 	}
@@ -86,16 +88,20 @@ public class pbeMysqlConn extends DatabaseConnection implements Conn {
 		this.deleteSwitch = deleteSwitch;
 	}
 
-
 	public boolean isQuerySwitch() {
 		return querySwitch;
 	}
 
-
 	public void setQuerySwitch(boolean querySwitch) {
 		this.querySwitch = querySwitch;
 	}
+	public boolean isDbInsertSwitch() {
+		return dbInsertSwitch;
+	}
 
+	public void setDbInsertSwitch(boolean dbInsertSwitch) {
+		this.dbInsertSwitch = dbInsertSwitch;
+	}
 	 
 
 }
