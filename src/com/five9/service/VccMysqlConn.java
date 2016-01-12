@@ -14,6 +14,7 @@ import com.five9.model.DatabaseConnection;
 public class VccMysqlConn extends DatabaseConnection implements Conn{
 	 
 	private DataSource mysqlPara; 
+	private boolean updateSwitch;
 
 	/* <p>Function to moniter connection progress</p>
 	 */
@@ -23,15 +24,18 @@ public class VccMysqlConn extends DatabaseConnection implements Conn{
 		System.out.println("Echo from vcc mysql server.......");
 //		update();
 		if(deleteSwitch)
-			this.delete();
+			this.delete(this.deleteSql);
 		if(dbInsertSwitch){
 			readCSV_XLSX();
 			importDataToDB(csv_xlsx);
 		}
+		if(this.updateSwitch){
+			this.update(updateSql);
+		}
 		if(this.querySwitch)
-			query();
+			query(this.querySql);
 	}
-	
+	@Override
 	protected void readCSV_XLSX(){
 		 System.out.println("Reading data from vcc and pbe csv/xlsx file....");
 		 //static function here 
@@ -110,6 +114,14 @@ public class VccMysqlConn extends DatabaseConnection implements Conn{
 
 	public void setDbInsertSwitch(boolean dbInsertSwitch) {
 		this.dbInsertSwitch = dbInsertSwitch;
+	}
+
+	public boolean isUpdateSwitch() {
+		return updateSwitch;
+	}
+
+	public void setUpdateSwitch(boolean updateSwitch) {
+		this.updateSwitch = updateSwitch;
 	}
 
 	 

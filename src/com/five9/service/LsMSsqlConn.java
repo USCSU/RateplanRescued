@@ -21,7 +21,7 @@ public class LsMSsqlConn extends DatabaseConnection implements Conn{
 //			this.delete();
 //		importDataToDB();
 		if(this.querySwitch)
-			query();
+			query(this.querySql);
 	}
 	
 	/*setters and getters*/

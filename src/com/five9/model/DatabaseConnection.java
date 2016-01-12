@@ -24,13 +24,13 @@ public abstract class DatabaseConnection {
 	protected boolean dbInsertSwitch;
 	protected Map<String,String> csv_xlsx;
 	
-	public void update(){
+	public void update(String updateSql){
 		this.jdbctemplate.update(updateSql);
 	}
-	public void delete(){
+	public void delete(String deleteSql){
 		jdbctemplate.update(deleteSql);
 	}
-	public void query(){
+	public void query(String querySql){
 		List<List<String>> data = this.jdbctemplate.query(querySql, new RowMapper<List<String>>(){
             public List<String> mapRow(ResultSet rs, int rowNum) 
                                          throws SQLException {
@@ -42,7 +42,8 @@ public abstract class DatabaseConnection {
        });
 		System.out.println(data);
 	}
-	private void batchInsertion(List<List<String>> data){
+	
+	protected void batchInsertion(List<List<String>> data, String batchInsertionSql){
 		if(data == null || data.isEmpty()) throw new IllegalArgumentException("data is not valid when batchinsertion list");
 		this.jdbctemplate.batchUpdate(batchInsertionSql, new BatchPreparedStatementSetter(){
 			@Override
@@ -57,31 +58,31 @@ public abstract class DatabaseConnection {
 			}
 		});
 	}
-	private void batchInsertion(Map<String,String> data){
+	protected void batchInsertion(Map<String,String> data,String batchInsertionSql){
 		this.jdbctemplate.batchUpdate(batchInsertionSql, new BatchPreparedStatementSetter(){
-			Object[] keys = csv_xlsx.keySet().toArray();
+			Object[] keys = data.keySet().toArray();
 			@Override
 			public void setValues(PreparedStatement ps, int i) throws SQLException{
 				String key = (String)keys[i];
 				ps.setString(1, key);
-				ps.setString(2, csv_xlsx.get(key));
+				ps.setString(2, data.get(key));
 			}
 			@Override
 			public int getBatchSize(){
-				return csv_xlsx.size();
+				return data.size();
 			}
 		});
 	}
 	protected void importDataToDB(Map<String,String> datasource){
 		if(datasource==null || datasource.isEmpty()) throw new IllegalArgumentException("No data from csv file!");
 		 System.out.println("Saving data to database....");
-		 batchInsertion(datasource);
+		 batchInsertion(datasource, batchInsertionSql);
 		 System.out.println("saving data done!");
 	}
 	protected void importDataToDB(List<List<String>> datasource){
 		if(datasource==null || datasource.isEmpty()) throw new IllegalArgumentException("No data from csv file!");
 		 System.out.println("Saving data to database....");
-		 batchInsertion(datasource);
+		 batchInsertion(datasource, batchInsertionSql);
 		 System.out.println("saving data done!");
 	}
 	 protected void readCSV_XLSX(){

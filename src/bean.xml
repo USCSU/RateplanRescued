@@ -11,30 +11,30 @@
 	<context:annotation-config/>
 	<context:component-scan base-package="com.five9.service"></context:component-scan>
 	<context:component-scan base-package="com.five9.consumer"></context:component-scan>
-	<!-- <bean id = "mssql" class = "com.five9.consumer.DBConnection">
+	<!--  <bean id = "mssql" class = "com.five9.consumer.DBConnection">
 		<property name="connection" ref = "lsmssql"></property>
-	</bean>
-	<bean id = "mysql" class = "com.five9.consumer.DBConnection">
+	</bean> -->
+	<bean id = "vcc" class = "com.five9.consumer.DBConnection">
 		<property name="connection" ref = "vccmysql"></property>
 	</bean>
 	
 	
-	start of bean for ls mssql mimic  
-	<bean id = "mssqlmimic" class = "com.five9.consumer.DBConnection">
-		<property name="connection" ref = "lsmysqlmimic"></property>
+	<!--  start of bean for ls mssql mimic-->  
+	<bean id = "ls" class = "com.five9.consumer.DBConnection">
+		<property name="connection" ref = "lsmysql"></property>
 	</bean>
-	<bean id = "pbemimic" class = "com.five9.consumer.DBConnection">
+	<bean id = "pbe" class = "com.five9.consumer.DBConnection">
 		<property name="connection" ref = "pbemysql"></property>
-	</bean> -->
+	</bean> 
 	 <bean id = "lsvcccmp" class = "com.five9.consumer.DBConnection">
 		<property name="connection" ref = "lsvcc"></property>
 	</bean> 
 	  <bean id = "lspbecmp" class = "com.five9.consumer.DBConnection">
 		<property name="connection" ref = "lspbe"></property>
 	</bean> 
-	  <!-- <bean id = "zuora" class = "com.five9.consumer.DBConnection">
+	<bean id = "zuora" class = "com.five9.consumer.DBConnection">
 		<property name="connection" ref = "zuoramysql"></property>
-	</bean>  -->
+	</bean> 
 	
 	<!--end of bean for ls mssql mimic -->
 	
@@ -56,7 +56,11 @@
 	 
 	 <bean id="vccmysql" class = "com.five9.service.VccMysqlConn" primary = "true">
 	 	<property name="mysqlPara" ref="mysqlPara"></property>
-	 	<property name="updateSql" value =""></property>
+	 	<property name="updateSql" value ="update 
+										   vcc,
+    									   (SELECT pbe.accounts as accounts, pbe.plan as pbe FROM pbe, vcc where pbe.accounts = vcc.accounts and pbe.plan!=vcc.plan) as intersection
+    										set vcc.plan = intersection.pbe
+   											where vcc.accounts = intersection.accounts;"></property>
 	 	<property name="querySql" value = "select * from vcc"></property>
 	 	<property name="deleteSql" value = "delete from vcc"></property>
 	 	<property name="batchInsertionSql" value = "insert into vcc(accounts,plan) values(?,?)"></property>
@@ -64,13 +68,14 @@
 	 	<property name="deleteSwitch" value = "True"></property>
 	 	<property name="querySwitch" value = "False"></property>
 	 	<property name="dbInsertSwitch" value = "True"></property>
+	 	<property name="updateSwitch" value = "True"></property>
 	 </bean>
 	 
 	 
 	 
 	 
 	 <!-- start of mysql mimic test purpose -->
-	 <bean id = "lsmysqlmimic" class = "com.five9.service.LsMysqlMimicConn" >
+	 <bean id = "lsmysql" class = "com.five9.service.LsMysqlMimicConn" >
 	 	<property name="mysqlPara" ref="mysqlPara"></property>
 	 	<property name="updateSql" value =""></property>
 	 	<property name="querySql" value = "select * from ls"></property>
@@ -136,7 +141,7 @@
 	 	<property name="exportSwitch" value = "True"></property>
 	 	<property name="querySwitch" value = "True"></property>
 	 	<property name="updateDBSwitch" value = "True"></property>
-	 	<property name="dbInsertSwitch" value = "True"></property>
+	 	<property name="dbInsertSwitch" value = "False"></property>
 	 </bean> 
 	 <bean id="lspbe" class = "com.five9.service.LsPbeCmpConn" >
 	 	<property name="mysqlPara" ref="mysqlPara"></property>
@@ -158,7 +163,7 @@
 	 	<property name="exportSwitch" value = "True"></property>
 	 	<property name="querySwitch" value = "True"></property>
 	 	<property name="updateDBSwitch" value = "True"></property>
-	 	<property name="dbInsertSwitch" value = "True"></property>
+	 	<property name="dbInsertSwitch" value = "False"></property>
 	 </bean> 
 	 <!--end of mysql mimuc test purpose  -->
 	 

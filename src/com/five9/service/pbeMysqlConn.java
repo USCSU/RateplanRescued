@@ -18,16 +18,16 @@ public class pbeMysqlConn extends DatabaseConnection implements Conn {
 		System.out.println("Echo from pbe mysql server.......");
 //		update();
 		if(deleteSwitch)
-			this.delete();
+			this.delete(this.deleteSql);
 		if(dbInsertSwitch){
 			readCSV_XLSX();
 			importDataToDB(csv_xlsx);
 		}
 		if(this.querySwitch)
-			query();
+			query(this.querySql);
 	}
 	 
-	
+	@Override
 	protected void readCSV_XLSX(){
 		 System.out.println("Reading data from vcc and pbe csv/xlsx file....");
 		 //static function here 

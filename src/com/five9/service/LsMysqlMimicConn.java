@@ -19,14 +19,14 @@ public class LsMysqlMimicConn extends DatabaseConnection implements Conn {
 		System.out.println();
 		System.out.println("Echo from ls mssql mimic server.......");
 //		update();
-		if(deleteSwitch) this.delete();
+		if(deleteSwitch) this.delete(this.deleteSql);
 		if(dbInsertSwitch){
 			readCSV_XLSX();
 			importDataToDB(csv_xlsx);
 		}
-		if(this.querySwitch) query();
+		if(this.querySwitch) query(this.querySql);
 	}
-	
+	@Override
 	protected void readCSV_XLSX(){
 		 System.out.println("Reading data from Logissense csv/xlsx file....");
 		 //static function here 

@@ -8,8 +8,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,15 +17,15 @@ import com.five9.model.DatabaseConnection;
 
 public class LsPbeCmpConn extends DatabaseConnection implements Conn {
 	private DataSource mysqlPara;
-	@Autowired
-	@Qualifier(value = "lsmysqlmimic")
-	private LsMysqlMimicConn ls;
-	@Autowired
-	@Qualifier(value = "zuoramysql")
-	private ZuoraMysqlConn zuora;
-	@Autowired
-	@Qualifier(value = "pbemysql")
-	private pbeMysqlConn pbe;
+//	@Autowired
+//	@Qualifier(value = "lsmysqlmimic")
+//	private LsMysqlMimicConn ls;
+//	@Autowired
+//	@Qualifier(value = "zuoramysql")
+//	private ZuoraMysqlConn zuora;
+//	@Autowired
+//	@Qualifier(value = "pbemysql")
+//	private pbeMysqlConn pbe;
 	
 	private boolean exportSwitch;
 	private boolean updateDBSwitch;
@@ -37,44 +35,46 @@ public class LsPbeCmpConn extends DatabaseConnection implements Conn {
 		System.out.println("This is echo for ls pbe monitering process of comparison");
 		if(this.deleteSwitch) {
 			System.out.println("	deleting.....");
-			this.delete();
+			this.delete(this.deleteSql);
 			System.out.println("	Deletion done!");
 		}
 		if(this.dbInsertSwitch){
 			System.out.println("	inserting.....");
-			ls.moniter();
-			pbe.moniter();
-			zuora.moniter();
+//			ls.moniter();
+//			pbe.moniter();
+//			zuora.moniter();
+			
 			System.out.println("	Insertion done!");
 			
 		}
 		if(this.querySwitch){
 			System.out.println("	Querying data....");
-			this.query();
+			this.query(this.querySql);
 			System.out.println("	Querying done!");
 		}
 		if(this.updateDBSwitch){
 			System.out.println("	inserting data .....");
 //			batchInsertion();
-			update();
+			update(updateSql);
 			System.out.println("	Insertion done!.....");
 		}
 		if(this.exportSwitch){
 			System.out.println("	Exporting data to file .....");
-			exportToFile();	
+			exportToFile(path,data);	
 			System.out.println("	Exporting done!.....");
 		}
 	}
-	public void exportToFile(){
+	public void exportToFile(String path,List<List<String>> data){
 		if(data==null || data.isEmpty()) throw new IllegalArgumentException("data not found or data is empty(Data comparison statge)....");
 		ReadWriteCSV_XLSX.appendToFile(path, data);
 	}
-	public void update(){
-		if(data == null || data.isEmpty() ) throw new IllegalArgumentException("no data in database when comparing datas");
+	@Override
+	public void update(String updateSql){
 		this.jdbctemplate.update(updateSql);
 	}
 	//for batch insertion
-	public void batchInsertion(){
+	@Override
+	public void batchInsertion(List<List<String>> data, String batchInsertionSql){
 		this.jdbctemplate.batchUpdate(batchInsertionSql, new BatchPreparedStatementSetter(){
 			@Override
 			public void setValues(PreparedStatement ps, int i) throws SQLException{
@@ -88,7 +88,8 @@ public class LsPbeCmpConn extends DatabaseConnection implements Conn {
 			}
 		});
 	}
-	public void query(){
+	@Override
+	public void query(String querySql){
 		data = this.jdbctemplate.query(querySql, new RowMapper<List<String>>(){
             public List<String> mapRow(ResultSet rs, int rowNum) 
                                          throws SQLException {
@@ -101,7 +102,6 @@ public class LsPbeCmpConn extends DatabaseConnection implements Conn {
             		return ret;
             }
        });
-		System.out.println(data);
 	}  
 	
 	
