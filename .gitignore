@@ -1,2 +1,5 @@
 /bin/
 /target/
+/input
+/output
+bean.xml
