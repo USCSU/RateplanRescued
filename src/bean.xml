@@ -45,7 +45,7 @@
 	 <bean id="lsmssql" class = "com.five9.service.LsMSsqlConn">
 	 	<property name="mssqlPara" ref="mssqlPara"></property>
 	 	<property name="updateSql" value =""></property>
-	 	<property name="path" value = "Input/LSaccountRateplan.xlsx"></property>
+	 	<property name="path" value = "Input/LS.xlsx"></property>
 	 	<property name="querySql" value = "select * from Server"></property>
 	 	<property name="deleteSql" value = ""></property>
 	 	<property name="deleteSwitch" value = "False"></property>
@@ -64,7 +64,7 @@
 	 	<property name="querySql" value = "select * from vcc"></property>
 	 	<property name="deleteSql" value = "delete from vcc"></property>
 	 	<property name="batchInsertionSql" value = "insert into vcc(accounts,plan) values(?,?)"></property>
-	 	<property name="path" value = "Input/VccaccountRateplan.csv"></property>
+	 	<property name="path" value = "Input/vcc.csv"></property>
 	 	<property name="deleteSwitch" value = "True"></property>
 	 	<property name="querySwitch" value = "False"></property>
 	 	<property name="dbInsertSwitch" value = "True"></property>
@@ -81,7 +81,7 @@
 	 	<property name="querySql" value = "select * from ls"></property>
 	 	<property name="deleteSql" value = "delete from ls"></property>
 	 	<property name="batchInsertionSql" value = "insert into ls(accounts,plan) values(?,?)"></property>
-	 	<property name="path" value = "Input/LSaccountRateplan.xlsx"></property>
+	 	<property name="path" value = "Input/LS.xlsx"></property>
 	 	<property name="deleteSwitch" value = "True"></property>
 	 	<property name="querySwitch" value = "False"></property>
 	 	<property name="dbInsertSwitch" value = "True"></property>
@@ -92,7 +92,7 @@
 	 	<property name="querySql" value = "select * from pbe"></property>
 	 	<property name="deleteSql" value = "delete from pbe"></property>
 	 	<property name="batchInsertionSql" value = "insert into pbe(accounts,plan) values(?,?)"></property>
-	 	<property name="path" value = "Input/pbeaccountRateplan.csv"></property>
+	 	<property name="path" value = "Input/pbe.csv"></property>
 	 	<property name="deleteSwitch" value = "True"></property>
 	 	<property name="querySwitch" value = "False"></property>
 	 	<property name="dbInsertSwitch" value = "True"></property>
@@ -104,9 +104,9 @@
 	 	<property name="deleteSql" value = "delete from zuora"></property>
 	 	<property name="batchInsertionSql" value = "insert into zuora(accounts,plan) values(?,?)"></property>
 	 	<property name="inputpath" value = "Input/zuora.xlsx"></property>
-	 	<property name="deleteSwitch" value = "True"></property>
+	 	<property name="deleteSwitch" value = "true"></property>
 	 	<property name="querySwitch" value = "False"></property>
-	 	<property name="dbInsertSwitch" value = "True"></property>
+	 	<property name="dbInsertSwitch" value = "true"></property>
 	 </bean>
 	 
 	 <bean id="lsvcc" class = "com.five9.service.LsVccCmpConn" >

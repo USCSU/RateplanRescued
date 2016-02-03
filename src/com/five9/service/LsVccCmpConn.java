@@ -69,7 +69,7 @@ public class LsVccCmpConn extends DatabaseConnection implements Conn {
 		}
 	}
 	public void exportToFile(String path, List<List<String>> data){
-		if(data==null || data.isEmpty()) throw new IllegalArgumentException("data not found or data is empty(Data comparison statge)....");
+		if(data==null) throw new IllegalArgumentException("data not found or data is empty(Data comparison statge)....");
 		ReadWriteCSV_XLSX.writetoFile(path, data);
 	}
 	@Override

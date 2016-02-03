@@ -205,7 +205,7 @@ public class ReadWriteCSV_XLSX {
 			try {
 				XSSFWorkbook workbook;
 				workbook = (XSSFWorkbook) WorkbookFactory.create(new FileInputStream(path));
-				XSSFSheet sheet = workbook.getSheetAt(0);
+				XSSFSheet sheet = workbook.getSheetAt(1);
 //				HSSFWorkbook workbook = new HSSFWorkbook(new FileInputStream(inputpath));
 //				HSSFSheet sheet = workbook.getSheetAt(1);
 //				for(Row row:sheet){
@@ -223,17 +223,17 @@ public class ReadWriteCSV_XLSX {
 					ret.add(list);
 				}
 				
-//				sheet = workbook.getSheetAt(2);
-//				for(int i =0;i<sheet.getLastRowNum();i++){
-//					DataFormatter formatter = new DataFormatter();
-//					String key = formatter.formatCellValue(sheet.getRow(i).getCell(0));
-//					String value = formatter.formatCellValue(sheet.getRow(i).getCell(1));
-//					if(checker.contains(key)) continue;
-//					List<String> list = new LinkedList<String>();
-//					list.add(key);
-//					list.add(value);
-//					ret.add(list);
-//				}
+				sheet = workbook.getSheetAt(2);
+				for(int i =0;i<sheet.getLastRowNum();i++){
+					DataFormatter formatter = new DataFormatter();
+					String key = formatter.formatCellValue(sheet.getRow(i).getCell(0));
+					String value = formatter.formatCellValue(sheet.getRow(i).getCell(1));
+					if(checker.contains(key)) continue;
+					List<String> list = new LinkedList<String>();
+					list.add(key);
+					list.add(value);
+					ret.add(list);
+				}
 	        
 			}  catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
